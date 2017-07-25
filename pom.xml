@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>labetu-parent</artifactId>
+    <groupId>com.labetu</groupId>
+    <version>0.0-SNAPSHOT</version>
+    <relativePath>parent/pom.xml</relativePath>
+  </parent>
+  <artifactId>rail-splitter-parent</artifactId>
+  <version>0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>rail-splitter</module>
+  </modules>
+  <scm>
+    <connection>scm:git:ssh://git@github.org/icirellik/rail-splitter.git</connection>
+    <developerConnection>scm:git:ssh://git@github.org/icirellik/rail-splitter.git</developerConnection>
+    <url>https://github.org/icirellik/rail-splitter</url>
+  </scm>
+  <properties>
+    <guava.version>22.0</guava.version>
+    <immutables.version>2.5.5</immutables.version>
+    <junit.version>4.12</junit.version>
+    <mockito.version>1.10.19</mockito.version>
+    <slf4j.version>1.7.18</slf4j.version>
+    <tinylog.version>1.0.3</tinylog.version>
+  </properties>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
