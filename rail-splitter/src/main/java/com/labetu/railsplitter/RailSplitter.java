@@ -35,9 +35,16 @@ public final class RailSplitter implements org.slf4j.Logger {
    * @return The number of log messages flushed.
    */
   public static int flush() {
-    final int messageCount = messageQueue.get().size();
-    messageQueue.get().stream().forEach(Rail::write);
-    return messageCount;
+    final int written = messageQueue.get().stream().map(Rail::write).mapToInt(x -> x).sum();
+    messageQueue.get().clear();
+    return written;
+  }
+
+  /**
+   * Manually clear the log buffer.
+   */
+  public static void clear() {
+    messageQueue.get().clear();
   }
 
   /**

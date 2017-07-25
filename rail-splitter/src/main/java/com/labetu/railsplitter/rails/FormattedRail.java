@@ -32,7 +32,7 @@ public interface FormattedRail extends Rail {
 
   @Override
   @Value.Derived
-  default void write() {
+  default int write() {
     if (getLevel() == Level.DEBUG && getLogger().isDebugEnabled()) {
       getLogger().debug(getFormat(), getObjects());
     } else if (getLevel() == Level.ERROR && getLogger().isErrorEnabled()) {
@@ -43,7 +43,10 @@ public interface FormattedRail extends Rail {
       getLogger().trace(getFormat(), getObjects());
     } else if (getLevel() == Level.WARN && getLogger().isWarnEnabled()) {
       getLogger().warn(getFormat(), getObjects());
+    } else {
+      return 0;
     }
+    return 1;
   }
 
 }
