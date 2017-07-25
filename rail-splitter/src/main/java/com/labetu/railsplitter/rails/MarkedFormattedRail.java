@@ -40,7 +40,7 @@ public interface MarkedFormattedRail extends Rail {
 
   @Override
   @Value.Derived
-  default void write() {
+  default int write() {
     if (getLevel() == Level.DEBUG && getLogger().isDebugEnabled()) {
       getLogger().debug(getMarker(), getFormat(), getObjects());
     } else if (getLevel() == Level.ERROR && getLogger().isErrorEnabled()) {
@@ -51,7 +51,10 @@ public interface MarkedFormattedRail extends Rail {
       getLogger().trace(getMarker(), getFormat(), getObjects());
     } else if (getLevel() == Level.WARN && getLogger().isWarnEnabled()) {
       getLogger().warn(getMarker(), getFormat(), getObjects());
+    } else {
+      return 0;
     }
+    return 1;
   }
 
 }

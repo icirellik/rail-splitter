@@ -23,7 +23,9 @@ public interface Rail  {
 
   /**
    * Writes the stored log to the saved logger.
+   *
+   * @return The number of messages logged.
    */
-  void write();
+  int write();
 
 }

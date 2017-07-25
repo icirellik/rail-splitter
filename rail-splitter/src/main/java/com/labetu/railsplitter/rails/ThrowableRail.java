@@ -30,7 +30,7 @@ public interface ThrowableRail extends Rail {
 
   @Override
   @Value.Derived
-  default void write() {
+  default int write() {
     if (getLevel() == Level.DEBUG && getLogger().isDebugEnabled()) {
       getLogger().debug(getMessage(), getThrowable());
     } else if (getLevel() == Level.ERROR && getLogger().isErrorEnabled()) {
@@ -41,7 +41,10 @@ public interface ThrowableRail extends Rail {
       getLogger().trace(getMessage(), getThrowable());
     } else if (getLevel() == Level.WARN && getLogger().isWarnEnabled()) {
       getLogger().warn(getMessage(), getThrowable());
+    } else {
+      return 0;
     }
+    return 1;
   }
 
 }

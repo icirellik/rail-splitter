@@ -23,7 +23,7 @@ public interface StandardRail extends Rail {
 
   @Override
   @Value.Derived
-  default void write() {
+  default int write() {
     if (getLevel() == Level.DEBUG && getLogger().isDebugEnabled()) {
       getLogger().debug(getMessage());
     } else if (getLevel() == Level.ERROR && getLogger().isErrorEnabled()) {
@@ -34,7 +34,10 @@ public interface StandardRail extends Rail {
       getLogger().trace(getMessage());
     } else if (getLevel() == Level.WARN && getLogger().isWarnEnabled()) {
       getLogger().warn(getMessage());
+    } else {
+      return 0;
     }
+    return 1;
   }
 
 }

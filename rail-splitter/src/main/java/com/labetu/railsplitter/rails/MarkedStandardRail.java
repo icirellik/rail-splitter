@@ -31,7 +31,7 @@ public interface MarkedStandardRail extends Rail {
 
   @Override
   @Value.Derived
-  default void write() {
+  default int write() {
     if (getLevel() == Level.DEBUG && getLogger().isDebugEnabled()) {
       getLogger().debug(getMarker(), getMessage());
     } else if (getLevel() == Level.ERROR && getLogger().isErrorEnabled()) {
@@ -42,7 +42,10 @@ public interface MarkedStandardRail extends Rail {
       getLogger().trace(getMarker(), getMessage());
     } else if (getLevel() == Level.WARN && getLogger().isWarnEnabled()) {
       getLogger().warn(getMarker(), getMessage());
+    } else {
+      return 0;
     }
+    return 1;
   }
 
 }
