@@ -2,6 +2,9 @@ package com.labetu.railsplitter.rails;
 
 import com.labetu.railsplitter.Level;
 import com.labetu.railsplitter.Rail;
+import com.labetu.railsplitter.utility.Objects;
+import java.lang.ref.SoftReference;
+import java.util.List;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 
@@ -24,25 +27,23 @@ public interface FormattedRail extends Rail {
   /**
    * The list of object that should be logged.
    *
-   * TODO: Is this going to cause a memory leak, should these be weak references.
-   *
    * @return The objects to log.
    */
-  Object[] getObjects();
+  List<SoftObjectReference> getObjects();
 
   @Override
   @Value.Derived
   default int write() {
     if (getLevel() == Level.DEBUG && getLogger().isDebugEnabled()) {
-      getLogger().debug(getFormat(), getObjects());
+      getLogger().debug(getFormat(), Objects.fromSoftReferences(getObjects()));
     } else if (getLevel() == Level.ERROR && getLogger().isErrorEnabled()) {
-      getLogger().error(getFormat(), getObjects());
+      getLogger().error(getFormat(), Objects.fromSoftReferences(getObjects()));
     } else if (getLevel() == Level.INFO && getLogger().isInfoEnabled()) {
-      getLogger().info(getFormat(), getObjects());
+      getLogger().info(getFormat(), Objects.fromSoftReferences(getObjects()));
     } else if (getLevel() == Level.TRACE && getLogger().isTraceEnabled()) {
-      getLogger().trace(getFormat(), getObjects());
+      getLogger().trace(getFormat(), Objects.fromSoftReferences(getObjects()));
     } else if (getLevel() == Level.WARN && getLogger().isWarnEnabled()) {
-      getLogger().warn(getFormat(), getObjects());
+      getLogger().warn(getFormat(), Objects.fromSoftReferences(getObjects()));
     } else {
       return 0;
     }

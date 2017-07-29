@@ -7,6 +7,7 @@ import com.labetu.railsplitter.rails.ImmutableMarkedStandardRail;
 import com.labetu.railsplitter.rails.ImmutableMarkedThrowableRail;
 import com.labetu.railsplitter.rails.ImmutableStandardRail;
 import com.labetu.railsplitter.rails.ImmutableThrowableRail;
+import com.labetu.railsplitter.utility.Objects;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
@@ -85,7 +86,8 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableFormattedRail.builder()
         .format(format)
         .level(Level.TRACE)
-        .objects(arguments)
+        .logger(logger)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -126,8 +128,9 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
         .format(format)
         .level(Level.TRACE)
+        .logger(logger)
         .marker(marker)
-        .objects(arguments)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -168,7 +171,8 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableFormattedRail.builder()
         .format(format)
         .level(Level.DEBUG)
-        .objects(arguments)
+        .logger(logger)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -209,8 +213,9 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
         .format(format)
         .level(Level.DEBUG)
+        .logger(logger)
         .marker(marker)
-        .objects(arguments)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -251,7 +256,8 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableFormattedRail.builder()
         .format(format)
         .level(Level.INFO)
-        .objects(arguments)
+        .logger(logger)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -292,8 +298,9 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
         .format(format)
         .level(Level.INFO)
+        .logger(logger)
         .marker(marker)
-        .objects(arguments)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -334,7 +341,8 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableFormattedRail.builder()
         .format(format)
         .level(Level.WARN)
-        .objects(arguments)
+        .logger(logger)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -375,8 +383,9 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
         .format(format)
         .level(Level.WARN)
+        .logger(logger)
         .marker(marker)
-        .objects(arguments)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -417,7 +426,8 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableFormattedRail.builder()
         .format(format)
         .level(Level.ERROR)
-        .objects(arguments)
+        .logger(logger)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
@@ -458,8 +468,9 @@ public final class RailSplitter implements org.slf4j.Logger {
     messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
         .format(format)
         .level(Level.ERROR)
+        .logger(logger)
         .marker(marker)
-        .objects(arguments)
+        .objects(Objects.toSoftReferences(arguments))
         .build()
     );
   }
