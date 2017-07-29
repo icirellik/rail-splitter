@@ -3,7 +3,6 @@ package com.labetu.railsplitter;
 import static com.labetu.railsplitter.RailSplitter.railSplit;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;

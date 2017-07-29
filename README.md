@@ -19,3 +19,5 @@ In the future it would also be cool to have message log only when conditional
 operating states have been hit.
 
 Automatically log the next x messages after an exception.
+
+Use hard references for x% or the most recent messages.
