@@ -3,6 +3,7 @@ package com.labetu.railsplitter;
 import static com.labetu.railsplitter.RailSplitter.railSplit;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
@@ -128,6 +129,81 @@ public class RailSplitterTest {
     RailSplitter.clear();
 
     assertEquals(0, RailSplitter.flush());
+  }
+
+  @Test
+  public void test_trace_format_object() {
+
+    Configurator.currentConfig()
+        .formatPattern(CONFIG_PATTERN)
+        .level(Level.TRACE)
+        .maxStackTraceElements(500)
+        .activate();
+
+    rog.trace("This is a test {}", "apple");
+    rog.trace("This is a test {} {}", 1, "banana");
+
+    assertEquals(2, RailSplitter.flush());
+  }
+
+  @Test
+  public void test_debug_format_object() {
+
+    Configurator.currentConfig()
+        .formatPattern(CONFIG_PATTERN)
+        .level(Level.TRACE)
+        .maxStackTraceElements(500)
+        .activate();
+
+    rog.debug("This is a test {}", "apple");
+    rog.debug("This is a test {}", 1, "banana");
+
+    assertEquals(2, RailSplitter.flush());
+  }
+
+  @Test
+  public void test_info_format_object() {
+
+    Configurator.currentConfig()
+        .formatPattern(CONFIG_PATTERN)
+        .level(Level.TRACE)
+        .maxStackTraceElements(500)
+        .activate();
+
+    rog.info("This is a test {}", "apple");
+    rog.info("This is a test {}", 1, "banana");
+
+    assertEquals(2, RailSplitter.flush());
+  }
+
+  @Test
+  public void test_warn_format_object() {
+
+    Configurator.currentConfig()
+        .formatPattern(CONFIG_PATTERN)
+        .level(Level.TRACE)
+        .maxStackTraceElements(500)
+        .activate();
+
+    rog.warn("This is a test {}", "apple");
+    rog.warn("This is a test {}", 1, "banana");
+
+    assertEquals(2, RailSplitter.flush());
+  }
+
+  @Test
+  public void test_error_format_object() {
+
+    Configurator.currentConfig()
+        .formatPattern(CONFIG_PATTERN)
+        .level(Level.TRACE)
+        .maxStackTraceElements(500)
+        .activate();
+
+    rog.error("This is a test {}", "apple");
+    rog.error("This is a test {}", 1, "banana");
+
+    assertEquals(2, RailSplitter.flush());
   }
 
 }
