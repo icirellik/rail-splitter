@@ -3,7 +3,6 @@ package com.labetu.railsplitter.rails;
 import com.labetu.railsplitter.Level;
 import com.labetu.railsplitter.Rail;
 import com.labetu.railsplitter.utility.Objects;
-import java.lang.ref.SoftReference;
 import java.util.List;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
