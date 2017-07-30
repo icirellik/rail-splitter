@@ -1,5 +1,7 @@
 package com.labetu.railsplitter;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import com.google.common.collect.EvictingQueue;
 import com.labetu.railsplitter.rails.ImmutableFormattedRail;
 import com.labetu.railsplitter.rails.ImmutableMarkedFormattedRail;
@@ -11,22 +13,75 @@ import com.labetu.railsplitter.utility.Objects;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
+/**
+ * A {@link RailTie} is the slf4j decorator, this class wraps current log calls and stores them for
+ * later usage.
+ */
 abstract class RailTie implements org.slf4j.Logger {
 
-  private static final int DEFAULT_MESSAGE_QUEUE_SIZE = 512;
+  protected static final int DEFAULT_MESSAGE_QUEUE_SIZE = 512;
 
-  private static final ThreadLocal<EvictingQueue<Rail>> messageQueue =
+  protected static final ThreadLocal<EvictingQueue<Rail>> messageQueue =
       ThreadLocal.withInitial(() -> EvictingQueue.create(DEFAULT_MESSAGE_QUEUE_SIZE));
 
+  private final Switchman configuration;
+
   private final Logger logger;
+
+  /**
+   * The number of future message remaining to be logged after flush event has occurred.
+   *
+   * TODO: Make this immutable.
+   */
+  private int futureMessagesRemaining;
 
   /**
    * Creates a new {@link RailTie} with a stored logger.
    *
    * @param logger The logger to write messages with.
+   * @param configuration The configuration to use.
    */
-  RailTie(final Logger logger) {
+  RailTie(final Logger logger, final Switchman configuration) {
+    this.configuration = configuration;
     this.logger = logger;
+  }
+
+  public void cleanup() {
+    messageQueue.remove();
+  }
+
+  /**
+   * Manually clear the log buffer.
+   */
+  private void clearQueue() {
+    getQueue().clear();
+  }
+
+  /**
+   * Flushes all stored log messages.
+   *
+   * @return The number of log messages flushed.
+   */
+  private void flushQueue() {
+    final int written;
+    if (configuration.logAllMessages()
+        || configuration.getPreviousLogs() >= DEFAULT_MESSAGE_QUEUE_SIZE) {
+      written = getQueue().stream().map(Rail::write).mapToInt(x -> x).sum();
+    } else if (futureMessagesRemaining > 0) {
+      written = getQueue().remove().write();
+      futureMessagesRemaining--;
+    } else {
+      for (int i = getQueue().size() - configuration.getPreviousLogs(); i > 0; i--) {
+        getQueue().remove();
+      }
+      written = getQueue().stream().map(Rail::write).mapToInt(x -> x).sum();
+    }
+    if (configuration.logFutureMessagees()) {
+      futureMessagesRemaining = configuration.getLogFutureMessages();
+    }
+    // TODO: Verify that this is required.
+    getQueue().clear();
+    checkState(written >= 0, "Logs flushed cannot be negative.");
   }
 
   /**
@@ -56,6 +111,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -77,6 +135,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -88,6 +149,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -104,6 +168,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -126,6 +193,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -138,6 +208,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -153,6 +226,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.DEBUG) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -174,6 +250,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.DEBUG) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -185,6 +264,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.DEBUG) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -201,6 +283,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.DEBUG) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -223,6 +308,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.DEBUG) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -235,6 +323,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.DEBUG) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -250,6 +341,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.INFO) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -271,6 +365,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.INFO) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -282,6 +379,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.INFO) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -298,6 +398,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.INFO) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -320,6 +423,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.INFO) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -332,6 +438,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.INFO) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -347,6 +456,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.WARN) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -368,6 +480,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.WARN) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -379,6 +494,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.WARN) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -395,6 +513,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.WARN) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -417,6 +538,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.WARN) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -429,6 +553,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.WARN) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -444,6 +571,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -465,6 +595,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -476,6 +609,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -492,6 +628,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .message(msg)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -514,6 +653,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
   }
 
   @Override
@@ -526,6 +668,9 @@ abstract class RailTie implements org.slf4j.Logger {
         .throwable(t)
         .build()
     );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
   }
 
 }

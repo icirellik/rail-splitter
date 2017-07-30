@@ -1,16 +1,22 @@
 package com.labetu.railsplitter;
 
-import static com.labetu.railsplitter.RailSplitter.railSplit;
+import static com.labetu.railsplitter.RailSplitter.rail;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RailSplitterThreadTest {
 
-  private static final Logger rog = railSplit(LoggerFactory.getLogger(RailSplitterThreadTest.class));
+  private static final Logger rog = rail(LoggerFactory.getLogger(RailSplitterThreadTest.class));
+
+  @BeforeClass
+  public static void beforeAll() {
+    RailSplitter.clearThreadLocals();
+  }
 
   @Test
   public void test_thread_safety() throws InterruptedException {

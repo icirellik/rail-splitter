@@ -4,25 +4,45 @@ import org.slf4j.Logger;
 
 public final class RailSplitter extends RailTie {
 
+  private static ThreadLocal<Switchman> configuration;
+
   /**
-   * Creates a new rail splitter that decorated the current logger.
+   * Creates a new {@link RailSplitter} with a stored logger.
+   *
+   * @param logger The logger to write messages with.
+   */
+  public RailSplitter(final Logger logger) {
+    super(logger, configuration.get());
+  }
+
+  /**
+   * Creates a new {@link RailSplitter} that decorated the current logger.
    *
    * @param logger The logger to decorate.
    * @return The rail splitter.
    */
-  public static RailSplitter railSplit(final Logger logger) {
-    return new RailSplitter(logger);
+  public static RailSplitter rail(final Logger logger) {
+    return rail(logger, Switchman.builder().build());
   }
 
   /**
-   * Flushes all stored log messages.
+   * Creates a new {@link RailSplitter} with a custom configuration.
    *
-   * @return The number of log messages flushed.
+   * @param logger The logger to decorate.
+   * @param configuration The configuration to use.
+   * @return The rail splitter.
    */
-  public static int flush() {
-    final int written = getQueue().stream().map(Rail::write).mapToInt(x -> x).sum();
-    getQueue().clear();
-    return written;
+  public static RailSplitter rail(final Logger logger, final Switchman configuration) {
+
+    if (RailSplitter.configuration != null && RailSplitter.configuration.get() != null) {
+      logger.warn("The current thread has been configured and may not be overridden by {}",
+          logger.getName());
+    } else {
+      RailSplitter.configuration = new ThreadLocal<>();
+      RailSplitter.configuration.set(configuration);
+    }
+
+    return new RailSplitter(logger);
   }
 
   /**
@@ -33,12 +53,32 @@ public final class RailSplitter extends RailTie {
   }
 
   /**
-   * Creates a new {@link RailSplitter} with a stored logger.
+   * Flushes all stored log messages.
    *
-   * @param logger The logger to write messages with.
+   * @return The number of log messages flushed.
    */
-  public RailSplitter(final Logger logger) {
-    super(logger);
+  public static int flush() {
+    final int written = getQueue().stream().map(Rail::write).mapToInt(x -> x).sum();
+    // TODO: Verify that this is required.
+    getQueue().clear();
+    return written;
+  }
+
+  /**
+   * The number of messages that have been queued.
+   *
+   * @return The queued messages.
+   */
+  public static int size() {
+    return getQueue().size();
+  }
+
+  /**
+   * Removes all thread local objects.
+   */
+  public static void clearThreadLocals() {
+    configuration.remove();
+    messageQueue.remove();
   }
 
 }

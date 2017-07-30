@@ -2,24 +2,16 @@ package com.labetu.railsplitter;
 
 public final class Level {
 
-  public static final Level TRACE = new Level((short)0);
+  public static final short TRACE = 1;
 
-  public static final Level DEBUG = new Level((short)1);
+  public static final short DEBUG = 1 << 2;
 
-  public static final Level INFO = new Level((short)2);
+  public static final short INFO = 1 << 3;
 
-  public static final Level WARN = new Level((short)3);
+  public static final short WARN = 1 << 4;
 
-  public static final Level ERROR = new Level((short)4);
+  public static final short ERROR = 1 << 5;
 
-  private final short level;
-
-  private Level(final short level) {
-    this.level = level;
-  }
-
-  public short getLevel() {
-    return level;
-  }
+  public static final short OFF = 1 << 6;
 
 }

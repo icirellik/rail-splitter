@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 public interface ThrowableRail extends Rail {
 
   @Override
-  Level getLevel();
+  short getLevel();
 
   @Override
   Logger getLogger();
