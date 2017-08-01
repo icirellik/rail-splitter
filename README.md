@@ -20,4 +20,6 @@ operating states have been hit.
 
 Automatically log the next x messages after an exception.
 
-Use hard references for x% or the most recent messages.
+Transaction points.
+
+Level class to int and bitwise operations

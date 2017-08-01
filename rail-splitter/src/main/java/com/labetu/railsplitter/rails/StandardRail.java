@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 public interface StandardRail extends Rail {
 
   @Override
-  Level getLevel();
+  short getLevel();
 
   @Override
   Logger getLogger();
@@ -22,7 +22,6 @@ public interface StandardRail extends Rail {
   String getMessage();
 
   @Override
-  @Value.Derived
   default int write() {
     if (getLevel() == Level.DEBUG && getLogger().isDebugEnabled()) {
       getLogger().debug(getMessage());

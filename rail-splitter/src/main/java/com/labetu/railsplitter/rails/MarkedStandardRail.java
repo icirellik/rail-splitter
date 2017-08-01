@@ -10,7 +10,7 @@ import org.slf4j.Marker;
 public interface MarkedStandardRail extends Rail {
 
   @Override
-  Level getLevel();
+  short getLevel();
 
   @Override
   Logger getLogger();

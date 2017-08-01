@@ -18,7 +18,7 @@ public interface FormattedRail extends Rail {
   String getFormat();
 
   @Override
-  Level getLevel();
+  short getLevel();
 
   @Override
   Logger getLogger();

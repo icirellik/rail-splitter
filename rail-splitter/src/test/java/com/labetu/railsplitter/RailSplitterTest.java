@@ -1,8 +1,9 @@
 package com.labetu.railsplitter;
 
-import static com.labetu.railsplitter.RailSplitter.railSplit;
+import static com.labetu.railsplitter.RailSplitter.rail;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
@@ -16,7 +17,15 @@ public class RailSplitterTest {
 
   private static final Logger log = LoggerFactory.getLogger(RailSplitterTest.class);
 
-  private static final Logger rog = railSplit(LoggerFactory.getLogger(RailSplitterTest.class));
+  private static final Logger rog = rail(
+      log,
+      Switchman.builder().logOnLevel(com.labetu.railsplitter.Level.OFF).build()
+  );
+
+  @BeforeClass
+  public static void beforeAll() {
+    RailSplitter.clearThreadLocals();
+  }
 
   @Test
   public void test_log() {
@@ -40,6 +49,7 @@ public class RailSplitterTest {
     rog.warn("This is a test warn");
     rog.error("This is a test error");
 
+    assertEquals(5, RailSplitter.size());
     assertEquals(5, RailSplitter.flush());
   }
 
@@ -57,6 +67,7 @@ public class RailSplitterTest {
     rog.warn("This is a test warn");
     rog.error("This is a test error");
 
+    assertEquals(5, RailSplitter.size());
     assertEquals(4, RailSplitter.flush());
   }
 
@@ -74,6 +85,7 @@ public class RailSplitterTest {
     rog.warn("This is a test warn");
     rog.error("This is a test error");
 
+    assertEquals(5, RailSplitter.size());
     assertEquals(3, RailSplitter.flush());
   }
 
@@ -91,6 +103,7 @@ public class RailSplitterTest {
     rog.warn("This is a test warn");
     rog.error("This is a test error");
 
+    assertEquals(5, RailSplitter.size());
     assertEquals(2, RailSplitter.flush());
   }
 
@@ -108,6 +121,7 @@ public class RailSplitterTest {
     rog.warn("This is a test warn");
     rog.error("This is a test error");
 
+    assertEquals(5, RailSplitter.size());
     assertEquals(1, RailSplitter.flush());
   }
 

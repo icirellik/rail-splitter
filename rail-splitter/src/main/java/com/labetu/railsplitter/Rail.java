@@ -12,7 +12,7 @@ public interface Rail  {
    *
    * @return The log level.
    */
-  Level getLevel();
+  short getLevel();
 
   /**
    * Tracks the logger so that we can log which class, etc the original log came from.
