@@ -17,7 +17,7 @@ import org.slf4j.Marker;
  * A {@link RailTie} is the slf4j decorator, this class wraps current log calls and stores them for
  * later usage.
  */
-abstract class RailTie implements org.slf4j.Logger {
+abstract class RailTie implements Logger {
 
   protected static final int DEFAULT_MESSAGE_QUEUE_SIZE = 512;
 
