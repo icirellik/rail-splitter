@@ -1,8 +1,10 @@
 package com.labetu.railsplitter;
 
 import static com.labetu.railsplitter.RailSplitter.rail;
+import static com.labetu.railsplitter.TestContants.CONFIG_PATTERN;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pmw.tinylog.Configurator;
@@ -12,13 +14,8 @@ import org.slf4j.LoggerFactory;
 
 public class RailSplitterFutureTest {
 
-  private static final String CONFIG_PATTERN =
-      "{date:yyyy-MM-dd'T'HH:mm:ssZ} [{thread}] {level} {class_name}:{line} {message}";
-
-  private static final Logger log = LoggerFactory.getLogger(RailSplitterFutureTest.class);
-
-  private static final Logger rog = rail(
-      log,
+  private static final Logger log = rail(
+      LoggerFactory.getLogger(RailSplitterFutureTest.class),
       Switchman.builder()
           .futureLogs(1)
           .logOnLevel(com.labetu.railsplitter.Level.DEBUG)
@@ -27,13 +24,15 @@ public class RailSplitterFutureTest {
 
   @BeforeClass
   public static void beforeAll() {
-
     Configurator.currentConfig()
         .formatPattern(CONFIG_PATTERN)
         .level(Level.TRACE)
         .maxStackTraceElements(500)
         .activate();
+  }
 
+  @AfterClass
+  public static void afterAll() {
     RailSplitter.clearThreadLocals();
   }
 
@@ -45,12 +44,12 @@ public class RailSplitterFutureTest {
   public void test_future_logs() {
 
     // The standard logs.
-    rog.trace("(buffered) This is a test trace");
-    rog.debug("(buffered) This is a test debug");
-    rog.info("(trigger) This is a test info");
-    rog.debug("(future) This is a test debug");
-    rog.trace("(ignored) This is a test trace");
-    rog.trace("(ignored) This is a test trace");
+    log.trace("(buffered) This is a test trace");
+    log.debug("(buffered) This is a test debug");
+    log.info("(trigger) This is a test info");
+    log.debug("(future) This is a test debug");
+    log.trace("(ignored) This is a test trace");
+    log.trace("(ignored) This is a test trace");
 
     assertEquals(2, RailSplitter.size());
     assertEquals(2, RailSplitter.flush());

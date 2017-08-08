@@ -4,17 +4,17 @@ import static com.labetu.railsplitter.RailSplitter.rail;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.BeforeClass;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RailSplitterThreadTest {
 
-  private static final Logger rog = rail(LoggerFactory.getLogger(RailSplitterThreadTest.class));
+  private static final Logger log = rail(LoggerFactory.getLogger(RailSplitterThreadTest.class));
 
-  @BeforeClass
-  public static void beforeAll() {
+  @AfterClass
+  public static void afterAll() {
     RailSplitter.clearThreadLocals();
   }
 
@@ -25,7 +25,7 @@ public class RailSplitterThreadTest {
       @Override
       public void run() {
         try {
-          rog.info("First");
+          log.info("First");
           Thread.sleep(500);
           assertEquals(1, RailSplitter.flush());
         } catch (InterruptedException e) {
@@ -40,7 +40,7 @@ public class RailSplitterThreadTest {
       public void run() {
         try {
           Thread.sleep(250);
-          rog.info("Second");
+          log.info("Second");
           assertEquals(1, RailSplitter.flush());
         } catch (InterruptedException e) {
           fail();

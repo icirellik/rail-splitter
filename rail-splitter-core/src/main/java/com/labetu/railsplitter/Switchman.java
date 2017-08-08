@@ -18,12 +18,6 @@ public final class Switchman {
   public static final int LOG_FUTURE_MESSAGES = 1 << 2;
 
   /**
-   * The number of previous logs to write when an exception occurs in the case that no transaction
-   * point has been set.
-   */
-  private final int previousLogs;
-
-  /**
    * The number of logs to write after an exception occurs. This can be used to get more insight
    * into where an exception occurred.
    */
@@ -40,22 +34,36 @@ public final class Switchman {
   private final short logOnLevel;
 
   /**
+   * The number of previous logs to write when an exception occurs in the case that no transaction
+   * point has been set.
+   */
+  private final int previousLogs;
+
+  /**
+   * Are statistics enabled?
+   */
+  private final boolean statistics;
+
+  /**
    *
    * @param previousLogs The number of previous messages to log.
    * @param futureLogs The number of future messages to log when a flush occurs.
    * @param features The features to enable.
    * @param logOnLevel The level that causes a log flush when seen.
+   * @param statistics Enables statistics.
    */
   private Switchman(
       final int previousLogs,
       final int futureLogs,
       final int features,
-      final short logOnLevel
+      final short logOnLevel,
+      final boolean statistics
   ) {
     this.previousLogs = previousLogs;
     this.futureLogs = futureLogs;
     this.features = features;
     this.logOnLevel = logOnLevel;
+    this.statistics = statistics;
   }
 
   public int getPreviousLogs() {
@@ -70,12 +78,16 @@ public final class Switchman {
     return (features & LOG_EVERY_MESSAGE) == LOG_EVERY_MESSAGE;
   }
 
-  public boolean logFutureMessagees() {
+  public boolean logFutureMessages() {
     return (features & LOG_FUTURE_MESSAGES) == LOG_FUTURE_MESSAGES;
   }
 
   public short getLogOnLevel() {
     return logOnLevel;
+  }
+
+  public boolean statistics() {
+    return statistics;
   }
 
   public static Builder builder() {
@@ -94,6 +106,8 @@ public final class Switchman {
     private short logOnLevel;
 
     private int previousLogs;
+
+    private boolean statistics;
 
     private Builder() {
       features = 0;
@@ -122,6 +136,11 @@ public final class Switchman {
       return this;
     }
 
+    public Builder statistics(final boolean statistics) {
+      this.statistics = statistics;
+      return this;
+    }
+
     /**
      * Creates a new {@link Switchman} with the specified options.
      *
@@ -133,7 +152,7 @@ public final class Switchman {
       checkState(futureLogs > -1, "'futureLogs' must be 0 or greater");
       checkState(previousLogs > 0, "'previousLogs' must be greater than 0");
 
-      return new Switchman(previousLogs, futureLogs, features, logOnLevel);
+      return new Switchman(previousLogs, futureLogs, features, logOnLevel, statistics);
     }
 
   }
