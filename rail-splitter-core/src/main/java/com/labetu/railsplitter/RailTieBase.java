@@ -105,121 +105,6 @@ abstract class RailTieBase implements RailTie {
   }
 
   @Override
-  public boolean isTraceEnabled() {
-    return logger.isTraceEnabled();
-  }
-
-  @Override
-  public void trace(String msg) {
-    messageQueue.get().add(ImmutableStandardRail.builder()
-        .level(Level.TRACE)
-        .logger(logger)
-        .message(msg)
-        .build()
-    );
-    if (configuration.getLogOnLevel() <= Level.TRACE) {
-      flushQueue();
-    }
-  }
-
-  @Override
-  public void trace(String format, Object arg) {
-    trace(format, new Object[] { arg });
-  }
-
-  @Override
-  public void trace(String format, Object arg1, Object arg2) {
-    trace(format, new Object[] { arg1, arg2 });
-  }
-
-  @Override
-  public void trace(String format, Object... arguments) {
-    messageQueue.get().add(ImmutableFormattedRail.builder()
-        .format(format)
-        .level(Level.TRACE)
-        .logger(logger)
-        .objects(Objects.toSoftReferences(arguments))
-        .build()
-    );
-    if (configuration.getLogOnLevel() <= Level.TRACE) {
-      flushQueue();
-    }
-  }
-
-  @Override
-  public void trace(String msg, Throwable t) {
-    messageQueue.get().add(ImmutableThrowableRail.builder()
-        .level(Level.TRACE)
-        .logger(logger)
-        .message(msg)
-        .throwable(t)
-        .build()
-    );
-    if (configuration.getLogOnLevel() <= Level.TRACE) {
-      flushQueue();
-    }
-  }
-
-  @Override
-  public boolean isTraceEnabled(Marker marker) {
-    return logger.isTraceEnabled(marker);
-  }
-
-  @Override
-  public void trace(Marker marker, String msg) {
-    messageQueue.get().add(ImmutableMarkedStandardRail.builder()
-        .level(Level.TRACE)
-        .logger(logger)
-        .marker(marker)
-        .message(msg)
-        .build()
-    );
-    if (configuration.getLogOnLevel() <= Level.TRACE) {
-      flushQueue();
-    }
-  }
-
-  @Override
-  public void trace(Marker marker, String format, Object arg) {
-    trace(marker, format, new Object[] { arg });
-  }
-
-  @Override
-  public void trace(Marker marker, String format, Object arg1, Object arg2) {
-    trace(marker, format, new Object[] { arg1, arg2 });
-  }
-
-  @Override
-  public void trace(Marker marker, String format, Object... arguments) {
-    messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
-        .format(format)
-        .level(Level.TRACE)
-        .logger(logger)
-        .marker(marker)
-        .objects(Objects.toSoftReferences(arguments))
-        .build()
-    );
-    if (configuration.getLogOnLevel() <= Level.TRACE) {
-      flushQueue();
-    }
-  }
-
-  @Override
-  public void trace(Marker marker, String msg, Throwable t) {
-    messageQueue.get().add(ImmutableMarkedThrowableRail.builder()
-        .level(Level.TRACE)
-        .logger(logger)
-        .marker(marker)
-        .message(msg)
-        .throwable(t)
-        .build()
-    );
-    if (configuration.getLogOnLevel() <= Level.TRACE) {
-      flushQueue();
-    }
-  }
-
-  @Override
   public boolean isDebugEnabled() {
     return logger.isDebugEnabled();
   }
@@ -330,6 +215,121 @@ abstract class RailTieBase implements RailTie {
         .build()
     );
     if (configuration.getLogOnLevel() <= Level.DEBUG) {
+      flushQueue();
+    }
+  }
+
+  @Override
+  public boolean isErrorEnabled() {
+    return logger.isErrorEnabled();
+  }
+
+  @Override
+  public void error(String msg) {
+    messageQueue.get().add(ImmutableStandardRail.builder()
+        .level(Level.ERROR)
+        .logger(logger)
+        .message(msg)
+        .build()
+    );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
+  }
+
+  @Override
+  public void error(String format, Object arg) {
+    error(format, new Object[] { arg });
+  }
+
+  @Override
+  public void error(String format, Object arg1, Object arg2) {
+    error(format, new Object[] { arg1, arg2 });
+  }
+
+  @Override
+  public void error(String format, Object... arguments) {
+    messageQueue.get().add(ImmutableFormattedRail.builder()
+        .format(format)
+        .level(Level.ERROR)
+        .logger(logger)
+        .objects(Objects.toSoftReferences(arguments))
+        .build()
+    );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
+  }
+
+  @Override
+  public void error(String msg, Throwable t) {
+    messageQueue.get().add(ImmutableThrowableRail.builder()
+        .level(Level.ERROR)
+        .logger(logger)
+        .message(msg)
+        .throwable(t)
+        .build()
+    );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
+  }
+
+  @Override
+  public boolean isErrorEnabled(Marker marker) {
+    return logger.isErrorEnabled(marker);
+  }
+
+  @Override
+  public void error(Marker marker, String msg) {
+    messageQueue.get().add(ImmutableMarkedStandardRail.builder()
+        .level(Level.ERROR)
+        .logger(logger)
+        .marker(marker)
+        .message(msg)
+        .build()
+    );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
+  }
+
+  @Override
+  public void error(Marker marker, String format, Object arg) {
+    error(marker, format, new Object[] { arg });
+  }
+
+  @Override
+  public void error(Marker marker, String format, Object arg1, Object arg2) {
+    error(marker, format, new Object[] { arg1, arg2 });
+  }
+
+  @Override
+  public void error(Marker marker, String format, Object... arguments) {
+    messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
+        .format(format)
+        .level(Level.ERROR)
+        .logger(logger)
+        .marker(marker)
+        .objects(Objects.toSoftReferences(arguments))
+        .build()
+    );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
+      flushQueue();
+    }
+  }
+
+  @Override
+  public void error(Marker marker, String msg, Throwable t) {
+    messageQueue.get().add(ImmutableMarkedThrowableRail.builder()
+        .level(Level.ERROR)
+        .logger(logger)
+        .marker(marker)
+        .message(msg)
+        .throwable(t)
+        .build()
+    );
+    if (configuration.getLogOnLevel() <= Level.ERROR) {
       flushQueue();
     }
   }
@@ -565,116 +565,116 @@ abstract class RailTieBase implements RailTie {
   }
 
   @Override
-  public boolean isErrorEnabled() {
-    return logger.isErrorEnabled();
+  public boolean isTraceEnabled() {
+    return logger.isTraceEnabled();
   }
 
   @Override
-  public void error(String msg) {
+  public void trace(String msg) {
     messageQueue.get().add(ImmutableStandardRail.builder()
-        .level(Level.ERROR)
+        .level(Level.TRACE)
         .logger(logger)
         .message(msg)
         .build()
     );
-    if (configuration.getLogOnLevel() <= Level.ERROR) {
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
       flushQueue();
     }
   }
 
   @Override
-  public void error(String format, Object arg) {
-    error(format, new Object[] { arg });
+  public void trace(String format, Object arg) {
+    trace(format, new Object[] { arg });
   }
 
   @Override
-  public void error(String format, Object arg1, Object arg2) {
-    error(format, new Object[] { arg1, arg2 });
+  public void trace(String format, Object arg1, Object arg2) {
+    trace(format, new Object[] { arg1, arg2 });
   }
 
   @Override
-  public void error(String format, Object... arguments) {
+  public void trace(String format, Object... arguments) {
     messageQueue.get().add(ImmutableFormattedRail.builder()
         .format(format)
-        .level(Level.ERROR)
+        .level(Level.TRACE)
         .logger(logger)
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
-    if (configuration.getLogOnLevel() <= Level.ERROR) {
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
       flushQueue();
     }
   }
 
   @Override
-  public void error(String msg, Throwable t) {
+  public void trace(String msg, Throwable t) {
     messageQueue.get().add(ImmutableThrowableRail.builder()
-        .level(Level.ERROR)
+        .level(Level.TRACE)
         .logger(logger)
         .message(msg)
         .throwable(t)
         .build()
     );
-    if (configuration.getLogOnLevel() <= Level.ERROR) {
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
       flushQueue();
     }
   }
 
   @Override
-  public boolean isErrorEnabled(Marker marker) {
-    return logger.isErrorEnabled(marker);
+  public boolean isTraceEnabled(Marker marker) {
+    return logger.isTraceEnabled(marker);
   }
 
   @Override
-  public void error(Marker marker, String msg) {
+  public void trace(Marker marker, String msg) {
     messageQueue.get().add(ImmutableMarkedStandardRail.builder()
-        .level(Level.ERROR)
+        .level(Level.TRACE)
         .logger(logger)
         .marker(marker)
         .message(msg)
         .build()
     );
-    if (configuration.getLogOnLevel() <= Level.ERROR) {
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
       flushQueue();
     }
   }
 
   @Override
-  public void error(Marker marker, String format, Object arg) {
-    error(marker, format, new Object[] { arg });
+  public void trace(Marker marker, String format, Object arg) {
+    trace(marker, format, new Object[] { arg });
   }
 
   @Override
-  public void error(Marker marker, String format, Object arg1, Object arg2) {
-    error(marker, format, new Object[] { arg1, arg2 });
+  public void trace(Marker marker, String format, Object arg1, Object arg2) {
+    trace(marker, format, new Object[] { arg1, arg2 });
   }
 
   @Override
-  public void error(Marker marker, String format, Object... arguments) {
+  public void trace(Marker marker, String format, Object... arguments) {
     messageQueue.get().add(ImmutableMarkedFormattedRail.builder()
         .format(format)
-        .level(Level.ERROR)
+        .level(Level.TRACE)
         .logger(logger)
         .marker(marker)
         .objects(Objects.toSoftReferences(arguments))
         .build()
     );
-    if (configuration.getLogOnLevel() <= Level.ERROR) {
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
       flushQueue();
     }
   }
 
   @Override
-  public void error(Marker marker, String msg, Throwable t) {
+  public void trace(Marker marker, String msg, Throwable t) {
     messageQueue.get().add(ImmutableMarkedThrowableRail.builder()
-        .level(Level.ERROR)
+        .level(Level.TRACE)
         .logger(logger)
         .marker(marker)
         .message(msg)
         .throwable(t)
         .build()
     );
-    if (configuration.getLogOnLevel() <= Level.ERROR) {
+    if (configuration.getLogOnLevel() <= Level.TRACE) {
       flushQueue();
     }
   }
