@@ -2,7 +2,7 @@ package com.labetu.railsplitter;
 
 import org.slf4j.Logger;
 
-public final class RailSplitter extends RailTie {
+public final class RailSplitter extends RailTieBase {
 
   private static ThreadLocal<Switchman> configuration;
 
@@ -21,7 +21,7 @@ public final class RailSplitter extends RailTie {
    * @param logger The logger to decorate.
    * @return The rail splitter.
    */
-  public static RailSplitter rail(final Logger logger) {
+  public static RailTie rail(final Logger logger) {
     return rail(logger, Switchman.builder().build());
   }
 
@@ -32,7 +32,7 @@ public final class RailSplitter extends RailTie {
    * @param configuration The configuration to use.
    * @return The rail splitter.
    */
-  public static RailSplitter rail(final Logger logger, final Switchman configuration) {
+  public static RailTie rail(final Logger logger, final Switchman configuration) {
 
     if (RailSplitter.configuration != null && RailSplitter.configuration.get() != null) {
       logger.warn("The current thread has been configured and may not be overridden by {}",
@@ -42,6 +42,9 @@ public final class RailSplitter extends RailTie {
       RailSplitter.configuration.set(configuration);
     }
 
+    if (RailSplitter.configuration.get().statistics()) {
+      return new RailTieStatisticsCollector(new RailSplitter(logger));
+    }
     return new RailSplitter(logger);
   }
 
@@ -77,8 +80,12 @@ public final class RailSplitter extends RailTie {
    * Removes all thread local objects.
    */
   public static void clearThreadLocals() {
-    configuration.remove();
-    messageQueue.remove();
+    if (configuration != null && configuration.get() != null) {
+      configuration.remove();
+    }
+    if (messageQueue != null && messageQueue.get() != null) {
+      messageQueue.remove();
+    }
   }
 
 }

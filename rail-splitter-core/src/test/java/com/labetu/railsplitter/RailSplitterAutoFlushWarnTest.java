@@ -1,8 +1,10 @@
 package com.labetu.railsplitter;
 
 import static com.labetu.railsplitter.RailSplitter.rail;
+import static com.labetu.railsplitter.TestContants.CONFIG_PATTERN;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pmw.tinylog.Configurator;
@@ -12,21 +14,16 @@ import org.slf4j.LoggerFactory;
 
 public class RailSplitterAutoFlushWarnTest {
 
-  private static final String CONFIG_PATTERN =
-      "{date:yyyy-MM-dd'T'HH:mm:ssZ} [{thread}] {level} {class_name}:{line} {message}";
-
-  private static final Logger log = LoggerFactory.getLogger(RailSplitterAutoFlushWarnTest.class);
-
-  private static final Logger rog = rail(
-      log,
+  private static final Logger log = rail(
+      LoggerFactory.getLogger(RailSplitterAutoFlushWarnTest.class),
       Switchman.builder()
           .logOnLevel(com.labetu.railsplitter.Level.WARN)
           .previousLogs(2)
           .build()
   );
 
-  @BeforeClass
-  public static void beforeAll() {
+  @AfterClass
+  public static void afterAll() {
     RailSplitter.clearThreadLocals();
   }
 
@@ -38,13 +35,13 @@ public class RailSplitterAutoFlushWarnTest {
         .maxStackTraceElements(500)
         .activate();
 
-    rog.trace("This is a test trace");
-    rog.debug("This is a test debug");
-    rog.info("This is a test info");
+    log.trace("This is a test trace");
+    log.debug("This is a test debug");
+    log.info("This is a test info");
     assertEquals(3, RailSplitter.size());
-    rog.warn("This is a test warn");
+    log.warn("This is a test warn");
     assertEquals(0, RailSplitter.size());
-    rog.error("This is a test error");
+    log.error("This is a test error");
     assertEquals(0, RailSplitter.size());
     assertEquals(0, RailSplitter.flush());
   }
@@ -57,13 +54,13 @@ public class RailSplitterAutoFlushWarnTest {
         .maxStackTraceElements(500)
         .activate();
 
-    rog.trace("This is a test trace");
-    rog.debug("This is a test debug");
-    rog.info("This is a test info");
+    log.trace("This is a test trace");
+    log.debug("This is a test debug");
+    log.info("This is a test info");
     assertEquals(3, RailSplitter.size());
-    rog.warn("This is a test warn");
+    log.warn("This is a test warn");
     assertEquals(0, RailSplitter.size());
-    rog.error("This is a test error");
+    log.error("This is a test error");
     assertEquals(0, RailSplitter.size());
     assertEquals(0, RailSplitter.flush());
   }
@@ -76,13 +73,13 @@ public class RailSplitterAutoFlushWarnTest {
         .maxStackTraceElements(500)
         .activate();
 
-    rog.trace("This is a test trace");
-    rog.debug("This is a test debug");
-    rog.info("This is a test info");
+    log.trace("This is a test trace");
+    log.debug("This is a test debug");
+    log.info("This is a test info");
     assertEquals(3, RailSplitter.size());
-    rog.warn("This is a test warn");
+    log.warn("This is a test warn");
     assertEquals(0, RailSplitter.size());
-    rog.error("This is a test error");
+    log.error("This is a test error");
     assertEquals(0, RailSplitter.size());
     assertEquals(0, RailSplitter.flush());
   }
@@ -95,13 +92,13 @@ public class RailSplitterAutoFlushWarnTest {
         .maxStackTraceElements(500)
         .activate();
 
-    rog.trace("This is a test trace");
-    rog.debug("This is a test debug");
-    rog.info("This is a test info");
+    log.trace("This is a test trace");
+    log.debug("This is a test debug");
+    log.info("This is a test info");
     assertEquals(3, RailSplitter.size());
-    rog.warn("This is a test warn");
+    log.warn("This is a test warn");
     assertEquals(0, RailSplitter.size());
-    rog.error("This is a test error");
+    log.error("This is a test error");
     assertEquals(0, RailSplitter.size());
     assertEquals(0, RailSplitter.flush());
   }
@@ -114,13 +111,13 @@ public class RailSplitterAutoFlushWarnTest {
         .maxStackTraceElements(500)
         .activate();
 
-    rog.trace("This is a test trace");
-    rog.debug("This is a test debug");
-    rog.info("This is a test info");
+    log.trace("This is a test trace");
+    log.debug("This is a test debug");
+    log.info("This is a test info");
     assertEquals(3, RailSplitter.size());
-    rog.warn("This is a test warn");
+    log.warn("This is a test warn");
     assertEquals(0, RailSplitter.size());
-    rog.error("This is a test error");
+    log.error("This is a test error");
     assertEquals(0, RailSplitter.size());
     assertEquals(0, RailSplitter.flush());
   }
